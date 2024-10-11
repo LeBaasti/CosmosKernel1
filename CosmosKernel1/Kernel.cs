@@ -25,6 +25,20 @@ namespace CosmosKernel1
                 Console.WriteLine("Tim ist der Schreiber.");
                 Console.WriteLine("Oliver auch")
             }
+            if (input.Equals("--help", StringComparison.OrdinalIgnoreCase))
+{
+    Console.WriteLine("Usage: [your_program] [options]");
+    Console.WriteLine();
+    Console.WriteLine("Options:");
+    Console.WriteLine("  --help        Display this help message.");
+    Console.WriteLine("  --version     Show the program version.");
+    Console.WriteLine("  --config      Specify the configuration file.");
+    Console.WriteLine("  --verbose     Enable verbose logging.");
+    Console.WriteLine();
+    Console.WriteLine("Example:");
+    Console.WriteLine("  your_program --config=config.json --verbose");
+}
+
             else
             {
                 Console.Write("Text typed: ");
