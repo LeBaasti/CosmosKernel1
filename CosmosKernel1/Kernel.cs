@@ -23,6 +23,7 @@ namespace CosmosKernel1
             if (input.Equals("tim", StringComparison.OrdinalIgnoreCase))
             {
                 Console.WriteLine("Tim ist der Schreiber.");
+                Console.WriteLine("Oliver auch")
             }
             else
             {
