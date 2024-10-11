@@ -47,6 +47,10 @@ namespace CosmosKernel1
                         Console.WriteLine("Zeit seit Systemstart: " + (DateTime.Now - systemStart));
                         break;
                     }
+                case "echo":
+                    {
+                        break;
+                    }
                 default:
                     {
                         break;
