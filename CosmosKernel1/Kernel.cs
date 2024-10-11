@@ -10,6 +10,8 @@ namespace CosmosKernel1
 
         public static int memorySize = 16;
         Cosmos.Core.MemoryBlock08[] memory = new Cosmos.Core.MemoryBlock08[memorySize];
+        int uptimeInMilliseconds = Environment.TickCount;
+        TimeSpan uptime = TimeSpan.FromMilliseconds(uptimeInMilliseconds);
 
         protected override void BeforeRun()
         {
@@ -23,7 +25,7 @@ namespace CosmosKernel1
             if (input.Equals("tim", StringComparison.OrdinalIgnoreCase))
             {
                 Console.WriteLine("Tim ist der Schreiber.");
-                Console.WriteLine("Oliver auch")
+                Console.WriteLine("Oliver auch");
             }
             if (input.Equals("--help", StringComparison.OrdinalIgnoreCase))
 {
@@ -38,6 +40,9 @@ namespace CosmosKernel1
     Console.WriteLine("Example:");
     Console.WriteLine("  your_program --config=config.json --verbose");
 }
+if (input.Equals("runtime", StringComparison.OrdinalIgnoreCase))
+Console.WriteLine("Systemlaufzeit: {0} Tage, {1} Stunden, {2} Minuten, {3} Sekunden",
+            uptime.Days, uptime.Hours, uptime.Minutes, uptime.Seconds);
 
             else
             {
