@@ -8,6 +8,14 @@ namespace CosmosKernel1
 {
     internal class Memory
     {
-
+        Cosmos.Core.ManagedMemoryBlock newBlock= new Cosmos.Core.ManagedMemoryBlock(16);
+        public void WriteAt(uint index, byte value){
+            newBlock.Write8(index, value);
+        }
+        public ushort ReadAt(uint index){
+            ushort retVal= 0;
+            retVal = newBlock.Read16(index);
+            return retVal;
+        }
     }
 }
