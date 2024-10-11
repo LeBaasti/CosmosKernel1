@@ -11,11 +11,13 @@ namespace CosmosKernel1
 
         public static int memorySize = 16;
         Cosmos.Core.MemoryBlock08[] memory = new Cosmos.Core.MemoryBlock08[memorySize];
-        //Stopwatch timer = Stopwatch.StartNew();
+
+        public DateTime systemStart;
 
         protected override void BeforeRun()
         {
             Console.WriteLine("Cosmos booted successfully. Type a line of text to get it echoed back.");
+            systemStart = DateTime.Now;
         }
 
         protected override void Run()
@@ -42,10 +44,7 @@ namespace CosmosKernel1
                     }
                 case "runtime":
                     {
-                        //Console.WriteLine(timer.Elapsed.TotalSeconds);
-                        TimeSpan uptime = TimeSpan.FromMilliseconds(Environment.TickCount);
-                        Console.WriteLine("Systemlaufzeit: {0} Tage, {1} Stunden, {2} Minuten, {3} Sekunden",
-                                    uptime.Days, uptime.Hours, uptime.Minutes, uptime.Seconds);
+                        Console.WriteLine("Zeit seit Systemstart: " + (DateTime.Now - systemStart));
                         break;
                     }
                 default:
