@@ -7,7 +7,7 @@ using Cosmos.Core;
 using Cosmos.Core.IOGroup;
 using Cosmos.System;
 
-namespace KernelProject_One
+namespace CosmosKernel1
 {
     public static class MemoryMaster
     {

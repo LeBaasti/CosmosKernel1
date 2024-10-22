@@ -1,16 +1,15 @@
-﻿using KernelProject_One.Programs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Sys = Cosmos.System;
+using System.IO;
+using CosmosKernel1.Commands.API;
+using CosmosKernel1.Commands;
 
-namespace KernelProject_One
+namespace CosmosKernel1
 {
     public class Kernel : Sys.Kernel
     {
-        Directory RootDirectory = new Directory("source");
-        Directory CurrentDirectory = new Directory("none");
-
-        ProgramClass CurrentProgram = new Output();
+        CommandHandler commandHandler;
 
         User LocalMachine = new User("root", eUserLevel.kAdministrator);
         User CurrentUser = new User("none", eUserLevel.kNone);
@@ -20,11 +19,18 @@ namespace KernelProject_One
         protected override void BeforeRun()
         {
             Console.WriteLine("Cosmos booted successfully. Type a line of text to get it echoed back.");
+            commandHandler = new CommandHandler();
+            registerCommands();
+        }
+
+        private void registerCommands()
+        {
+            commandHandler.RegisterCommand("help", new HelpCommand());
+            commandHandler.RegisterCommand("echo", new EchoCommand());
         }
 
         protected override void Run()
         {
-            RootDirectory.AddDirectory(new Directory("etc", LocalMachine));
 
             while(CurrentUser.userName == "none")
             {
@@ -65,31 +71,18 @@ namespace KernelProject_One
                         if ((u.userName == name) && (u.password == passw))
                         {
                             Console.WriteLine("Login successfull!");
-                            CurrentDirectory = RootDirectory;
                             CurrentUser = u;
                         }
                     }
                 }              
             }
 
-            Console.Write(String.Format("{0} >:", CurrentDirectory.DirectoryName));
-            string command = Console.ReadLine();
+            string[] arguments = Console.ReadLine().Split(" ");
+            string command = arguments[0];
+            List<string> list = new List<string>(arguments);
+            list.RemoveAt(0);
 
-            switch(command)
-            {
-                case "output":
-                    {
-                        CurrentProgram = new Output();
-                        CurrentProgram.Run();
-                        break;
-                    }
-                case "help":
-                    {
-                        Console.WriteLine("\nhelp-Command");
-                        Console.WriteLine("output - start the output program");
-                        break;
-                    }
-            }
+            commandHandler.ExecuteCommand(command, list.ToArray());
         }
     }
 }

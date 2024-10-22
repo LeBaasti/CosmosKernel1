@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KernelProject_One
+namespace CosmosKernel1
 {
     public class User
     {
