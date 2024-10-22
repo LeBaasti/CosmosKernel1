@@ -1,4 +1,4 @@
-﻿using KernelProject_One.Programs;
+﻿
 using System;
 using System.Collections.Generic;
 using Sys = Cosmos.System;
@@ -7,6 +7,7 @@ namespace KernelProject_One
 {
     public class Kernel : Sys.Kernel
     {
+        // Custom Directory class definition
         Directory RootDirectory = new Directory("source");
         Directory CurrentDirectory = new Directory("none");
 
@@ -24,7 +25,7 @@ namespace KernelProject_One
 
         protected override void Run()
         {
-            RootDirectory.AddDirectory(new Directory("etc", LocalMachine));
+            RootDirectory.AddDirectory(new Directory("etc", LocalMachine));  // Example of adding a directory
 
             while(CurrentUser.userName == "none")
             {
@@ -44,7 +45,7 @@ namespace KernelProject_One
 
                             if(pass == pass2)
                             {
-                                Console.WriteLine("Passwort set!");
+                                Console.WriteLine("Password set!");
                                 User newUser = new User(uname, eUserLevel.kAdministrator);
                                 newUser.SetPassword(pass);
                                 Users.Add(newUser);
@@ -64,7 +65,7 @@ namespace KernelProject_One
                     {
                         if ((u.userName == name) && (u.password == passw))
                         {
-                            Console.WriteLine("Login successfull!");
+                            Console.WriteLine("Login successful!");
                             CurrentDirectory = RootDirectory;
                             CurrentUser = u;
                         }
@@ -90,6 +91,51 @@ namespace KernelProject_One
                         break;
                     }
             }
+        }
+    }
+
+    // Custom Directory class implementation
+    public class Directory
+{
+    public string DirectoryName { get; set; }
+    public List<Directory> SubDirectories { get; set; }
+    public List<File> Files { get; set; }
+    public User Owner { get; set; }  // Optional: Benutzer, der das Verzeichnis besitzt
+
+    // Konstruktor mit einem Parameter (nur Verzeichnisname)
+    public Directory(string name)
+    {
+        DirectoryName = name;
+        SubDirectories = new List<Directory>();
+        Files = new List<File>();
+    }
+
+    // Konstruktor mit zwei Parametern (Verzeichnisname und Benutzer)
+    public Directory(string name, User owner)
+    {
+        DirectoryName = name;
+        Owner = owner;  // Speichere den Benutzer als Eigentümer
+        SubDirectories = new List<Directory>();
+        Files = new List<File>();
+    }
+
+    public void AddDirectory(Directory dir)
+    {
+        SubDirectories.Add(dir);
+    }
+
+    // Weitere Methoden für die Verwaltung von Dateien, etc.
+}
+
+
+    // Example File class if needed
+    public class File
+    {
+        public string FileName { get; set; }
+
+        public File(string name)
+        {
+            FileName = name;
         }
     }
 }
