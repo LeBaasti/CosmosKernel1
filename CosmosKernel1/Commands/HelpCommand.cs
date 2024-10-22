@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace CosmosKernel1.Commands
 {
@@ -20,12 +21,29 @@ namespace CosmosKernel1.Commands
 
         public override void Run()
         {
-            Console.WriteLine("Help message goes here. (Use CommandHandler)");
+            Run(null);
         }
 
         public override void Run(string[] args)
         {
-            Run();
+            if (args == null || args.Length == 0)
+            {
+                foreach (var command in CommandHandler.GetAllCommands())
+                {
+                    Console.WriteLine(command.Usage);
+                }
+            }
+            else if (args.Length == 1)
+            {
+                if (CommandHandler.GetCommand(args[0]) is CommandBase command)
+                {
+                    Console.WriteLine(args[0] + ": " + command.Usage);
+                }
+                else
+                {
+                    Console.WriteLine($"Command '{args[0]}' not found!");
+                }
+            }
         }
     }
 }

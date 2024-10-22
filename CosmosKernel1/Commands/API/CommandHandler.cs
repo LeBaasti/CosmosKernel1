@@ -6,17 +6,13 @@ using System.Threading.Tasks;
 
 namespace CosmosKernel1.Commands.API
 {
-    class CommandHandler
+    public static class CommandHandler
     {
         // Dictionary zur Speicherung der Commands, wobei der Name als Schlüssel dient
-        private Dictionary<string, CommandBase> commands;
-
-        public CommandHandler() {
-            commands = new Dictionary<string, CommandBase>();
-        }
+        private static Dictionary<string, CommandBase> commands = new Dictionary<string, CommandBase>();
 
         // Methode zum Registrieren eines Commands
-        public void RegisterCommand(string name, CommandBase commandClass)
+        public static void RegisterCommand(string name, CommandBase commandClass)
         {
             // Command unter dem Namen registrieren
             if (!commands.ContainsKey(name))
@@ -25,19 +21,30 @@ namespace CosmosKernel1.Commands.API
             }
         }
 
-        // Methode zum Abrufen eines Commands
-        public void ExecuteCommand(string name)
-        {
-            ExecuteCommand(name, null);
-        }
+        public static List<CommandBase> GetAllCommands() { return commands.Values.ToList(); }
 
-        public void ExecuteCommand(string name, string[] args)
+        // Methode zum Abrufen eines Commands
+        public static CommandBase GetCommand(string name)
         {
             // Command anhand des Namens abrufen
             if (commands.TryGetValue(name, out var commandClass))
             {
-                commandClass.Init();
-                commandClass.Run(args);
+                return commandClass;
+            }
+            return null;
+        }
+
+        public static void ExecuteCommand(string name)
+        {
+            ExecuteCommand(name, null);
+        }
+
+        public static void ExecuteCommand(string name, string[] args)
+        {
+            if (GetCommand(name) is CommandBase command)
+            {
+                command.Init();
+                command.Run(args);
             }
             else
             {

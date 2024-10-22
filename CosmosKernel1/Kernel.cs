@@ -9,7 +9,6 @@ namespace CosmosKernel1
 {
     public class Kernel : Sys.Kernel
     {
-        CommandHandler commandHandler;
 
         User LocalMachine = new User("root", eUserLevel.kAdministrator);
         User CurrentUser = new User("none", eUserLevel.kNone);
@@ -19,14 +18,13 @@ namespace CosmosKernel1
         protected override void BeforeRun()
         {
             Console.WriteLine("Cosmos booted successfully. Type a line of text to get it echoed back.");
-            commandHandler = new CommandHandler();
             registerCommands();
         }
 
         private void registerCommands()
         {
-            commandHandler.RegisterCommand("help", new HelpCommand());
-            commandHandler.RegisterCommand("echo", new EchoCommand());
+            CommandHandler.RegisterCommand("help", new HelpCommand());
+            CommandHandler.RegisterCommand("echo", new EchoCommand());
         }
 
         protected override void Run()
@@ -82,7 +80,7 @@ namespace CosmosKernel1
             List<string> list = new List<string>(arguments);
             list.RemoveAt(0);
 
-            commandHandler.ExecuteCommand(command, list.ToArray());
+            CommandHandler.ExecuteCommand(command, list.ToArray());
         }
     }
 }
