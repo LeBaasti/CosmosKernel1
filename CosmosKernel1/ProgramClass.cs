@@ -1,30 +1,31 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CosmosKernel1
+namespace KernelProject_One
 {
     public abstract class ProgramClass
     {
-        public string PID { get; private set; }
-        public string Identifier { get; private set; }
-        public int MemoryStartIndex { get; private set; }
+        public ProgramIdentifier Identifier { get; private set; }
 
-        public ProgramClass(string pID, string identifier, int memoryStartIndex)
-        {
-            PID = pID;
-            Identifier = identifier;
-            MemoryStartIndex = memoryStartIndex;
-        }
+        public abstract void Init();
+        public abstract void Run();
+        public abstract void Run(string[] args);
     }
 
-    public class Calculator : ProgramClass
+    public struct ProgramIdentifier
     {
-        public Calculator(): base("", "", 5)
-        {
+        public string ProgramName { get; private set; }
+        public string Identifier { get; private set; }
+        public eUserLevel RequiredUserLevel { get; private set; }
 
+        public ProgramIdentifier(string programName, eUserLevel minimumLevel)
+        {
+            ProgramName = programName;
+            Identifier = programName + "_id";
+            RequiredUserLevel = minimumLevel;
         }
     }
 }
