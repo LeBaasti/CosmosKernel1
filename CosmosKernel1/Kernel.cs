@@ -4,6 +4,7 @@ using Sys = Cosmos.System;
 using System.IO;
 using CosmosKernel1.Commands.API;
 using CosmosKernel1.Commands;
+using Cosmos.System.ScanMaps;
 
 namespace CosmosKernel1
 {
@@ -17,11 +18,12 @@ namespace CosmosKernel1
 
         protected override void BeforeRun()
         {
-            Console.WriteLine("Cosmos booted successfully. Type a line of text to get it echoed back.");
+            SetKeyboardScanMap(new DE_Standard());
             FileSystemManager.Initialize();
             UserManagement.InitializeTestUsers();
             UserManagement.LoadUsers();
             registerCommands();
+            Console.WriteLine("Cosmos booted successfully. Type a line of text to get it echoed back.");
         }
 
         private void registerCommands()
