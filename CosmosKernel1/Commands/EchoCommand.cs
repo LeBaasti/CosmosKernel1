@@ -18,19 +18,14 @@ namespace CosmosKernel1.Commands
             //throw new NotImplementedException();
         }
 
-        public override void Run()
-        {
-            //throw new NotImplementedException();
-        }
-
-        public override void Run(string[] args)
+        public override bool Run(string[] args)
         {
             if(args == null || args.Length == 0) {
-                Console.WriteLine(Usage);
-                return; 
+                return false; 
             }
 
             Console.WriteLine(String.Join(" ", args));
+            return true;
         }
     }
 }

@@ -43,8 +43,7 @@ namespace CosmosKernel1.Commands.API
         {
             if (GetCommand(name) is CommandBase command)
             {
-                command.Init();
-                command.Run(args);
+                command.Execute(args);
             }
             else
             {

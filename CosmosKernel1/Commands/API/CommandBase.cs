@@ -13,8 +13,21 @@ namespace CosmosKernel1.Commands.API
         public abstract string Usage { get; }
 
         public abstract void Init();
-        public abstract void Run();
-        public abstract void Run(string[] args);
+        public abstract bool Run(string[] args);
+
+        public void Execute(string[] args)
+        {
+            Init();
+            if(!Run(args))
+            {
+                PrintUsage();
+            }
+        }
+
+        public void PrintUsage()
+        {
+            Console.WriteLine(Usage);
+        }
     }
 
     public struct CommandIdentifier

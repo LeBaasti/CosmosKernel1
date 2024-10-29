@@ -29,7 +29,6 @@ namespace CosmosKernel1
 
         protected override void Run()
         {
-
             while(CurrentUser.userName == "none")
             {
                 if(Users.Count == 0) 

@@ -19,12 +19,7 @@ namespace CosmosKernel1.Commands
             //throw new NotImplementedException();
         }
 
-        public override void Run()
-        {
-            Run(null);
-        }
-
-        public override void Run(string[] args)
+        public override bool Run(string[] args)
         {
             if (args == null || args.Length == 0)
             {
@@ -44,6 +39,7 @@ namespace CosmosKernel1.Commands
                     Console.WriteLine($"Command '{args[0]}' not found!");
                 }
             }
+            return true;
         }
     }
 }
