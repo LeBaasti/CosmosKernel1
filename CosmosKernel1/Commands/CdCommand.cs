@@ -1,6 +1,7 @@
 using CosmosKernel1.Commands.API;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,45 +21,45 @@ namespace CosmosKernel1.Commands
 
         public override bool Run(string[] args)
         {
-            if (args.Length > 1)
-                    {
-                        string newDir;
+            if (args.Length > 0)
+            {
+                string newDir;
 
-                        // Wenn der Benutzer ".." eingibt, navigiert er eine Verzeichnisebene zurück
-                        if (args[1] == "..")
-                        {
-                            // Parent-Directory extrahieren
-                            newDir = Directory.GetParent(currentDirectory)?.FullName;
-                            if (newDir == null)
-                            {
-                                Console.WriteLine("Sie befinden sich bereits im Root-Verzeichnis.");
-                            }
-                            else
-                            {
-                                currentDirectory = newDir;
-                                Console.WriteLine($"Verzeichnis gewechselt zu '{currentDirectory}'.");
-                            }
-                        }
-                        else
-                        {
-                            // Andernfalls kombiniere den aktuellen Pfad mit dem neuen Unterverzeichnis
-                            newDir = Path.Combine(currentDirectory, args[1]);
-                            if (Directory.Exists(newDir))
-                            {
-                                currentDirectory = newDir;
-                                Console.WriteLine($"Verzeichnis gewechselt zu '{currentDirectory}'.");
-                            }
-                            else
-                            {
-                                Console.WriteLine("Verzeichnis existiert nicht.");
-                            }
-                        }
+                // Wenn der Benutzer ".." eingibt, navigiert er eine Verzeichnisebene zurück
+                if (args[0] == "..")
+                {
+                    // Parent-Directory extrahieren
+                    newDir = Directory.GetParent(FileSystemManager.currentDirectory)?.FullName;
+                    if (newDir == null)
+                    {
+                        Console.WriteLine("Sie befinden sich bereits im Root-Verzeichnis.");
                     }
                     else
                     {
-                        Console.WriteLine("Bitte geben Sie ein Verzeichnis an.");
+                        FileSystemManager.currentDirectory = newDir;
+                        Console.WriteLine($"Verzeichnis gewechselt zu '{FileSystemManager.currentDirectory}'.");
                     }
-                    return true;
+                }
+                else
+                {
+                    // Andernfalls kombiniere den aktuellen Pfad mit dem neuen Unterverzeichnis
+                    newDir = Path.Combine(FileSystemManager.currentDirectory, args[0]);
+                    if (Directory.Exists(newDir))
+                    {
+                        FileSystemManager.currentDirectory = newDir;
+                        Console.WriteLine($"Verzeichnis gewechselt zu '{FileSystemManager.currentDirectory}'.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Verzeichnis existiert nicht.");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Bitte geben Sie ein Verzeichnis an.");
+            }
+            return true;
         }
     }
 }

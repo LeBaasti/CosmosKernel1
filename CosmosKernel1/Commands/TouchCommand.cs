@@ -1,6 +1,7 @@
 using CosmosKernel1.Commands.API;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,16 +21,16 @@ namespace CosmosKernel1.Commands
 
         public override bool Run(string[] args)
         {
-              if (args.Length > 1)
-                    {
-                        string filePath = Path.Combine(currentDirectory, args[1]);
-                        fileSystemManager.CreateFile(filePath, "");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Bitte geben Sie einen Dateinamen an.");
-                    }
-                    return true;
+            if (args.Length > 0)
+            {
+                string filePath = Path.Combine(FileSystemManager.currentDirectory, args[0]);
+                FileSystemManager.CreateFile(filePath, "");
+            }
+            else
+            {
+                Console.WriteLine("Bitte geben Sie einen Dateinamen an.");
+            }
+            return true;
         }
     }
 }

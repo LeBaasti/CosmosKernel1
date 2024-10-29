@@ -18,6 +18,7 @@ namespace CosmosKernel1
         protected override void BeforeRun()
         {
             Console.WriteLine("Cosmos booted successfully. Type a line of text to get it echoed back.");
+            FileSystemManager.Initialize();
             UserManagement.InitializeTestUsers();
             UserManagement.LoadUsers();
             registerCommands();
@@ -25,8 +26,17 @@ namespace CosmosKernel1
 
         private void registerCommands()
         {
-            CommandHandler.RegisterCommand("help", new HelpCommand());
-            CommandHandler.RegisterCommand("echo", new EchoCommand());
+            CommandHandler.RegisterCommand("cat",   new CatCommand());
+            CommandHandler.RegisterCommand("cd",    new CdCommand());
+            CommandHandler.RegisterCommand("echo",  new EchoCommand());
+            CommandHandler.RegisterCommand("help",  new HelpCommand());
+            CommandHandler.RegisterCommand("ls",    new LsCommand());
+            CommandHandler.RegisterCommand("mkdir", new MkdirCommand());
+            CommandHandler.RegisterCommand("rm",    new RmCommand());
+            CommandHandler.RegisterCommand("rmdir", new RmdirCommand());
+            CommandHandler.RegisterCommand("touch", new TouchCommand());
+            CommandHandler.RegisterCommand("write", new WriteCommand());
+
         }
 
         protected override void Run()

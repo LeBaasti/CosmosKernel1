@@ -2,11 +2,20 @@
 using System.IO;
 using Cosmos.System.FileSystem;
 using Cosmos.System.FileSystem.VFS;
+using Sys = Cosmos.System;
 
 namespace CosmosKernel1
 {
     public static class FileSystemManager
     {
+        public static string currentDirectory = @"0:\";
+        private static Sys.FileSystem.CosmosVFS fs;
+
+        public static void Initialize()
+        {
+            fs = new Sys.FileSystem.CosmosVFS();
+            Sys.FileSystem.VFS.VFSManager.RegisterVFS(fs);
+        }
         public static void CreateFile(string path, string content)
         {
             try

@@ -37,11 +37,11 @@ namespace CosmosKernel1
 
 
         // Benutzer hinzufügen
-        public static void AddUser(string username, string role, string password)
+        public static void AddUser(string username, string password, string role)
         {
             if (!users.ContainsKey(username))
             {
-                users.Add(username, new UserInfo(username, role, password)); // Übergebe den Benutzernamen
+                users.Add(username, new UserInfo(username, password, role)); // Übergebe den Benutzernamen
                 Console.WriteLine($"Benutzer {username} mit der Rolle {role} wurde hinzugefügt.");
                 SaveUsers(); // Speichert nach jedem Hinzufügen
             }
