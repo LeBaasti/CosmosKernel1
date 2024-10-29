@@ -18,6 +18,7 @@ namespace CosmosKernel1
 
         protected override void BeforeRun()
         {
+            //change german keyboard layout
             SetKeyboardScanMap(new DE_Standard());
             FileSystemManager.Initialize();
             UserManagement.InitializeTestUsers();
@@ -88,6 +89,7 @@ namespace CosmosKernel1
                 }              
             }
 
+            Console.Write($"user@cosmosos-desktop:{FileSystemManager.currentDirectory}$ ");
             string[] arguments = Console.ReadLine().Split(" ");
             string command = arguments[0];
             List<string> list = new List<string>(arguments);
