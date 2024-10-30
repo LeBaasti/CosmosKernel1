@@ -28,6 +28,22 @@ namespace CosmosKernel1
             this.Role = role;
             this.Permissions = permissions;
         }
+
+        public bool HasPermission(string permission)
+        {
+            if (Permissions.Contains("*")) return true;
+            permission = permission.ToLower();
+            if (Permissions.Contains(permission)) return true;
+            var permissionRoot = permission.Split('.');
+            if (permissionRoot.Length > 1)
+            {
+                for (int i = permissionRoot.Length - 1; i > 0; --i)
+                {
+                    if(Permissions.Contains($"{String.Join(".", permissionRoot.Take(i))}.*")) return true;
+                }
+            }
+            return false;
+        }
     }
     public static class UserManagement
     {
@@ -40,6 +56,7 @@ namespace CosmosKernel1
         // Benutzer hinzufügen
         public static void AddUser(string username, string password, string role)
         {
+            username = username.ToLower();
             if (!users.ContainsKey(username))
             {
                 users.Add(username, new UserInfo(username, password, role)); // Übergebe den Benutzernamen
@@ -54,12 +71,14 @@ namespace CosmosKernel1
         // Überprüfen, ob ein Benutzer existiert
         public static bool UserExists(string username)
         {
+            username = username.ToLower();
             return users.ContainsKey(username);
         }
 
         // Rolle eines Benutzers abrufen
         public static string GetUserRole(string username)
         {
+            username = username.ToLower();
             if (users.ContainsKey(username))
             {
                 return users[username].Role;
@@ -73,6 +92,7 @@ namespace CosmosKernel1
         // Benutzername abrufen (jetzt über die UserInfo-Klasse)
         public static string GetUsername(string username)
         {
+            username = username.ToLower();
             if (users.ContainsKey(username))
             {
                 return users[username].Name; // Hier verwenden wir die Name-Eigenschaft
@@ -86,6 +106,7 @@ namespace CosmosKernel1
         // Passwort eines Benutzers überprüfen
         public static bool VerifyPassword(string username, string password)
         {
+            username = username.ToLower();
             if (users.ContainsKey(username))
             {
                 return users[username].Password == password;
@@ -99,6 +120,7 @@ namespace CosmosKernel1
         // Rolle eines Benutzers ändern
         public static void ChangeUserRole(string username, string newRole)
         {
+            username = username.ToLower();
             if (users.ContainsKey(username))
             {
                 users[username].Role = newRole;
@@ -114,6 +136,7 @@ namespace CosmosKernel1
         // Benutzer entfernen
         public static void RemoveUser(string username)
         {
+            username = username.ToLower();
             if (users.ContainsKey(username))
             {
                 users.Remove(username);
@@ -148,6 +171,7 @@ namespace CosmosKernel1
         // Zugriff auf einen Benutzer
         public static void GetUserInfo(string username)
         {
+            username = username.ToLower();
             if (users.ContainsKey(username))
             {
                 UserInfo userInfo = users[username];
@@ -162,6 +186,7 @@ namespace CosmosKernel1
         // Benutzer Login-Anforderung
         public static bool Login(string username, string password)
         {
+            username = username.ToLower();
             if (users.ContainsKey(username))
             {
                 if (users[username].Password == password)
@@ -183,10 +208,22 @@ namespace CosmosKernel1
             }
         }
 
+        public static bool Logout()
+        {
+            if (loggedInUser != null)
+            {
+                loggedInUser = null;
+                return true;
+            }
+            return false;
+        }
+
         // Benutzername ändern(für den aktuell eingeloggten Benutzer)
         // Benutzername ändern
         public static bool ChangeUsername(string oldUsername, string newUsername)
         {
+            oldUsername = oldUsername.ToLower();
+            newUsername = newUsername.ToLower();
             if (users.ContainsKey(oldUsername))
             {
                 if (!users.ContainsKey(newUsername)) // Überprüfen, ob der neue Benutzername bereits existiert
@@ -258,7 +295,7 @@ namespace CosmosKernel1
                                 Console.WriteLine("Error with users.txt content format!");
                                 return;
                             }
-                            string username = userInfoString[0];
+                            string username = userInfoString[0].ToLower();
                             var parts = userInfoString[1].Split(",");
                             if (parts.Length >= 2)
                             {
@@ -289,9 +326,9 @@ namespace CosmosKernel1
                 Console.WriteLine("Erstelle Testbenutzer...");
 
                 // Testbenutzer hinzufügen
-                users.Add("User1", new UserInfo("User1", "password123", "User", "command.echo", "command.help"));
-                users.Add("User2", new UserInfo("User2", "adminPass", "Admin", "command.help"));
-                users.Add("User3", new UserInfo("User3", "password123", "User"));
+                users.Add("user1", new UserInfo("user1", "password123", "User", "command.echo", "command.help", "command.help.add"));
+                users.Add("user2", new UserInfo("user2", "adminPass", "Admin", "*"));
+                users.Add("user3", new UserInfo("user3", "password123", "User", "command.*"));
 
                 // Speichern der Benutzer in die Datei
                 SaveUsers();

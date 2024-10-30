@@ -17,7 +17,13 @@ namespace CosmosKernel1.Commands.API
 
         public void Execute(string[] args)
         {
-            Init();
+            if(!UserManagement.loggedInUser.HasPermission(Identifier.RequiredPermission))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Permission denied for command '{Identifier.CommandName}'!");
+                Console.ForegroundColor = ConsoleColor.White;
+                return;
+            }
             if(!Run(args))
             {
                 PrintUsage();
@@ -32,13 +38,13 @@ namespace CosmosKernel1.Commands.API
 
     public struct CommandIdentifier
     {
-        public string ProgramName { get; private set; }
+        public string CommandName { get; private set; }
         public string Identifier { get; private set; }
         public string RequiredPermission { get; private set; }
 
         public CommandIdentifier(string commandName)
         {
-            ProgramName = commandName;
+            CommandName = commandName;
             Identifier = commandName + "_id";
             RequiredPermission = "command."+commandName;
         }
