@@ -24,7 +24,8 @@ namespace CosmosKernel1
             UserManagement.InitializeTestUsers();
             UserManagement.LoadUsers();
             registerCommands();
-            Console.WriteLine("Cosmos booted successfully. Type a line of text to get it echoed back.");
+            Console.WriteLine("Cosmos booted successfully.");
+            login();
         }
 
         private void registerCommands()
@@ -42,54 +43,75 @@ namespace CosmosKernel1
 
         }
 
-        protected override void Run()
+        public void login()
         {
-            while(CurrentUser.userName == "none")
+            // Login-Auforderung
+            Console.WriteLine("Bitte melden Sie sich an.");
+            string username;
+            string password;
+
+            // Überprüfen, ob der Benutzer existiert
+            while (true)
             {
-                if(Users.Count == 0) 
+                Console.Write("Benutzername: ");
+                username = Console.ReadLine();
+
+                if (!string.IsNullOrEmpty(username) && UserManagement.UserExists(username))
                 {
-                    Console.Write("Create new user!\nEnter username: ");
-                    string uname = Console.ReadLine();
-                    if(uname.Length >= SystemSettings.MinCharCountUsername) 
-                    {
-                        Console.WriteLine("Enter password: ");
-                        string pass = Console.ReadLine();
-
-                        if(pass.Length >= SystemSettings.MinCharCountPassword)
-                        {
-                            Console.WriteLine("Repeat password: ");
-                            string pass2 = Console.ReadLine();
-
-                            if(pass == pass2)
-                            {
-                                Console.WriteLine("Passwort set!");
-                                User newUser = new User(uname, eUserLevel.kAdministrator);
-                                newUser.SetPassword(pass);
-                                Users.Add(newUser);
-                            }
-                        }
-                    }                    
+                    break; // Abbrechen, wenn der Benutzer existiert
                 }
                 else
                 {
-                    Console.Write("Log in with username: ");
-                    string name = Console.ReadLine();
-
-                    Console.Write("Password: ");
-                    string passw = Console.ReadLine();
-
-                    foreach (User u in Users)
-                    {
-                        if ((u.userName == name) && (u.password == passw))
-                        {
-                            Console.WriteLine("Login successfull!");
-                            CurrentUser = u;
-                        }
-                    }
-                }              
+                    Console.WriteLine("Benutzername falsch, bitte versuchen Sie es erneut.");
+                }
             }
 
-            Console.Write($"user@cosmosos-desktop:{FileSystemManager.currentDirectory}$ ");
+            // Endlosschleife zur Passwortabfrage
+            while (true) // Unendliche Schleife für die Passwortabfrage
+            {
+                Console.Write("Passwort: ");
+                password = GetPassword(); // Ruft das Passwort mit Sternchen-Eingabe ab
+
+                // Einloggen des Benutzers
+                if (UserManagement.Login(username, password)) break;
+            }
+        }
+
+        public static string GetPassword()
+        {
+            string password = "";
+            ConsoleKeyInfo key;
+
+            do
+            {
+                key = Console.ReadKey(true); // true = Zeichen wird nicht angezeigt
+
+                if (key.Key == ConsoleKey.Backspace && password.Length > 0)
+                {
+                    // Ein Zeichen aus der Passworteingabe löschen
+                    password = password.Substring(0, password.Length - 1);
+
+                    // Cursor eine Stelle zurücksetzen, das Sternchen überschreiben und Cursor wieder zurücksetzen
+                    int cursorPos = Console.CursorLeft;
+                    Console.SetCursorPosition(cursorPos - 1, Console.CursorTop);
+                    Console.Write(" ");
+                    Console.SetCursorPosition(cursorPos - 1, Console.CursorTop);
+                }
+                else if (key.Key != ConsoleKey.Enter && key.Key != ConsoleKey.Backspace)
+                {
+                    // Zeichen zum Passwort hinzufügen und Sternchen anzeigen
+                    password += key.KeyChar;
+                    Console.Write("*");
+                }
+            } while (key.Key != ConsoleKey.Enter); // Schleife läuft, bis Enter gedrückt wird
+
+            Console.WriteLine(); // Zeilenumbruch nach der Eingabe
+            return password;
+        }
+
+        protected override void Run()
+        {
+            Console.Write($"{UserManagement.loggedInUser.Name}@cosmosos-desktop:{FileSystemManager.currentDirectory}$ ");
             string[] arguments = Console.ReadLine().Split(" ");
             string command = arguments[0];
             List<string> list = new List<string>(arguments);

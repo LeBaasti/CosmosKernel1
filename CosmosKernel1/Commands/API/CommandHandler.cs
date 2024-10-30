@@ -18,6 +18,7 @@ namespace CosmosKernel1.Commands.API
             if (!commands.ContainsKey(name))
             {
                 commands[name] = commandClass;
+                commandClass.Init();
             }
         }
 

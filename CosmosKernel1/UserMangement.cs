@@ -35,6 +35,7 @@ namespace CosmosKernel1
         // Dictionary zur Verwaltung von Benutzern mit Benutzername, Rolle und Passwort
         private static Dictionary<string, UserInfo> users = new Dictionary<string, UserInfo>();
 
+        public static UserInfo loggedInUser { get; private set; }
 
         // Benutzer hinzufügen
         public static void AddUser(string username, string password, string role)
@@ -163,9 +164,11 @@ namespace CosmosKernel1
         {
             if (users.ContainsKey(username))
             {
+                Console.WriteLine(users[username].Password);
                 if (users[username].Password == password)
                 {
                     Console.WriteLine($"Login erfolgreich. Willkommen {username}!");
+                    loggedInUser = users[username];
                     return true;
                 }
                 else
@@ -226,7 +229,7 @@ namespace CosmosKernel1
                     foreach (var user in users)
                     {
                         var userInfo = user.Value;
-                        writer.WriteLine($"{user.Key},{userInfo.Role},{userInfo.Password}");
+                        writer.WriteLine($"{user.Key}:{userInfo.Password},{userInfo.Role},{String.Join(",", userInfo.Permissions)}");
                     }
                 }
                 Console.WriteLine("Benutzerdaten erfolgreich gespeichert.");
@@ -250,13 +253,20 @@ namespace CosmosKernel1
                         string line;
                         while ((line = reader.ReadLine()) != null)
                         {
-                            var parts = line.Split(',');
-                            if (parts.Length == 3)
+                            var userInfoString = line.Split(':');
+                            if (userInfoString == null || userInfoString.Length != 2)
                             {
-                                string username = parts[0];
+                                Console.WriteLine("Error with users.txt content format!");
+                                return;
+                            }
+                            string username = userInfoString[0];
+                            var parts = userInfoString[1].Split(",");
+                            if (parts.Length >= 2)
+                            {
+                                string password = parts[0];
                                 string role = parts[1];
-                                string password = parts[2];
-                                users[username] = new UserInfo(username, role, password);
+                                string[] permissions = parts.Skip(2).ToArray();
+                                users[username] = new UserInfo(username, password, role, permissions);
                             }
                         }
                     }
@@ -282,6 +292,7 @@ namespace CosmosKernel1
                 // Testbenutzer hinzufügen
                 users.Add("User1", new UserInfo("User1", "password123", "User", "command.echo", "command.help"));
                 users.Add("User2", new UserInfo("User2", "adminPass", "Admin", "command.help"));
+                users.Add("User3", new UserInfo("User3", "password123", "User"));
 
                 // Speichern der Benutzer in die Datei
                 SaveUsers();

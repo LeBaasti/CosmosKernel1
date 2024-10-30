@@ -11,7 +11,7 @@ namespace CosmosKernel1.Commands.API
         public abstract CommandIdentifier Identifier { get; }
 
         public abstract string Usage { get; }
-
+        //Is getting executed when the command handler registers the command
         public abstract void Init();
         public abstract bool Run(string[] args);
 
