@@ -164,7 +164,6 @@ namespace CosmosKernel1
         {
             if (users.ContainsKey(username))
             {
-                Console.WriteLine(users[username].Password);
                 if (users[username].Password == password)
                 {
                     Console.WriteLine($"Login erfolgreich. Willkommen {username}!");
