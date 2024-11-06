@@ -19,9 +19,9 @@ namespace CosmosKernel1.Commands.API
         {
             if(!UserManagement.loggedInUser.HasPermission(Identifier.RequiredPermission))
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Permission denied for command '{Identifier.CommandName}'!");
-                Console.ForegroundColor = ConsoleColor.White;
+                //Console.ForegroundColor = ConsoleColor.Red;
+                ConsoleHelper.WriteColored($"<red>Permission denied for command '{Identifier.CommandName}'!");
+                //Console.ForegroundColor = ConsoleColor.White;
                 return;
             }
             if(!Run(args))
