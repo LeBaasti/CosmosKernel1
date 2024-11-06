@@ -18,10 +18,10 @@ namespace CosmosKernel1
     {
         public string Name { get; set; }
         public string Password { get; set; }
-        public string Role { get; set; }
+        public Role Role { get; set; }
         public string[] Permissions { get; set; }
 
-        public User(string name, string password, string role, params string[] permissions)
+        public User(string name, string password, Role role, params string[] permissions)
         {
             this.Name = name;
             this.Password = password;
@@ -33,18 +33,20 @@ namespace CosmosKernel1
         {
             if (Permissions.Contains("*")) return true;
             permission = permission.ToLower();
+            if(Role.HasPermission(permission)) return true;
             if (Permissions.Contains(permission)) return true;
             var permissionRoot = permission.Split('.');
             if (permissionRoot.Length > 1)
             {
                 for (int i = permissionRoot.Length - 1; i > 0; --i)
                 {
-                    if(Permissions.Contains($"{String.Join(".", permissionRoot.Take(i))}.*")) return true;
+                    if (Permissions.Contains($"{String.Join(".", permissionRoot.Take(i))}.*")) return true;
                 }
             }
             return false;
         }
     }
+
     public static class UserManagement
     {
         private const string FilePath = @"0:\users.txt"; // Datei zur Speicherung
@@ -54,7 +56,7 @@ namespace CosmosKernel1
         public static User loggedInUser { get; private set; }
 
         // Benutzer hinzufügen
-        public static void AddUser(string username, string password, string role)
+        public static void AddUser(string username, string password, Role role)
         {
             username = username.ToLower();
             if (!users.ContainsKey(username))
@@ -71,22 +73,18 @@ namespace CosmosKernel1
         // Überprüfen, ob ein Benutzer existiert
         public static bool UserExists(string username)
         {
-            username = username.ToLower();
-            return users.ContainsKey(username);
+            return users.ContainsKey(username.ToLower());
         }
 
         // Rolle eines Benutzers abrufen
-        public static string GetUserRole(string username)
+        public static Role GetUserRole(string username)
         {
             username = username.ToLower();
             if (users.ContainsKey(username))
             {
                 return users[username].Role;
             }
-            else
-            {
-                return "Benutzer existiert nicht.";
-            }
+            return null;
         }
 
         // Benutzername abrufen (jetzt über die UserInfo-Klasse)
@@ -118,7 +116,7 @@ namespace CosmosKernel1
         }
 
         // Rolle eines Benutzers ändern
-        public static void ChangeUserRole(string username, string newRole)
+        public static void ChangeUserRole(string username, Role newRole)
         {
             username = username.ToLower();
             if (users.ContainsKey(username))
@@ -300,7 +298,7 @@ namespace CosmosKernel1
                             if (parts.Length >= 2)
                             {
                                 string password = parts[0];
-                                string role = parts[1];
+                                Role role = RoleMangement.GetRoleByName(parts[1]);
                                 string[] permissions = parts.Skip(2).ToArray();
                                 users[username] = new User(username, password, role, permissions);
                             }
@@ -326,9 +324,9 @@ namespace CosmosKernel1
                 Console.WriteLine("Erstelle Testbenutzer...");
 
                 // Testbenutzer hinzufügen
-                users.Add("user1", new User("user1", "password123", "User", "command.echo", "command.help", "command.help.add"));
-                users.Add("user2", new User("user2", "adminPass", "Admin", "*"));
-                users.Add("user3", new User("user3", "password123", "User", "command.*"));
+                users.Add("user1", new User("user1", "password123", RoleMangement.GetRoleByName("user"), "command.echo", "command.help", "command.help.add"));
+                users.Add("user2", new User("user2", "adminPass", RoleMangement.GetRoleByName("admin"), "*"));
+                users.Add("user3", new User("user3", "password123", RoleMangement.GetRoleByName("guest"), "command.ls"));
 
                 // Speichern der Benutzer in die Datei
                 SaveUsers();

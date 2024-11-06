@@ -11,20 +11,23 @@ namespace CosmosKernel1
     public class Kernel : Sys.Kernel
     {
 
-        User LocalMachine = new User("root", eUserLevel.kAdministrator);
-        User CurrentUser = new User("none", eUserLevel.kNone);
-
-        List<User> Users = new List<User>();
-
         protected override void BeforeRun()
         {
             //change german keyboard layout
             SetKeyboardScanMap(new DE_Standard());
+
             FileSystemManager.Initialize();
+
+            RoleMangement.InitializeTestRoles();
+            RoleMangement.LoadRoles();
+
             UserManagement.InitializeTestUsers();
             UserManagement.LoadUsers();
+
             registerCommands();
+
             Console.WriteLine("Cosmos booted successfully.");
+
             login();
         }
 
