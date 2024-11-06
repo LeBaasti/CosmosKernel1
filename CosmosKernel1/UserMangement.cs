@@ -14,14 +14,14 @@ using System.Linq;
 namespace CosmosKernel1
 {
     // Klasse zur Verwaltung von Benutzerinformationen
-    public class UserInfo
+    public class User
     {
         public string Name { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }
         public string[] Permissions { get; set; }
 
-        public UserInfo(string name, string password, string role, params string[] permissions)
+        public User(string name, string password, string role, params string[] permissions)
         {
             this.Name = name;
             this.Password = password;
@@ -49,9 +49,9 @@ namespace CosmosKernel1
     {
         private const string FilePath = @"0:\users.txt"; // Datei zur Speicherung
         // Dictionary zur Verwaltung von Benutzern mit Benutzername, Rolle und Passwort
-        private static Dictionary<string, UserInfo> users = new Dictionary<string, UserInfo>();
+        private static Dictionary<string, User> users = new Dictionary<string, User>();
 
-        public static UserInfo loggedInUser { get; private set; }
+        public static User loggedInUser { get; private set; }
 
         // Benutzer hinzufügen
         public static void AddUser(string username, string password, string role)
@@ -59,7 +59,7 @@ namespace CosmosKernel1
             username = username.ToLower();
             if (!users.ContainsKey(username))
             {
-                users.Add(username, new UserInfo(username, password, role)); // Übergebe den Benutzernamen
+                users.Add(username, new User(username, password, role)); // Übergebe den Benutzernamen
                 Console.WriteLine($"Benutzer {username} mit der Rolle {role} wurde hinzugefügt.");
                 SaveUsers(); // Speichert nach jedem Hinzufügen
             }
@@ -163,7 +163,7 @@ namespace CosmosKernel1
             foreach (var kvp in users)
             {
                 string username = kvp.Key;
-                UserInfo userInfo = kvp.Value;
+                User userInfo = kvp.Value;
                 Console.WriteLine($"Benutzer: {username}, Role: {userInfo.Role}");
             }
         }
@@ -174,7 +174,7 @@ namespace CosmosKernel1
             username = username.ToLower();
             if (users.ContainsKey(username))
             {
-                UserInfo userInfo = users[username];
+                User userInfo = users[username];
                 Console.WriteLine($"Benutzer: {username}, Passwort: {userInfo.Password}, Role: {userInfo.Role},");
             }
             else
@@ -228,7 +228,7 @@ namespace CosmosKernel1
             {
                 if (!users.ContainsKey(newUsername)) // Überprüfen, ob der neue Benutzername bereits existiert
                 {
-                    UserInfo userInfo = users[oldUsername];
+                    User userInfo = users[oldUsername];
                     users.Remove(oldUsername); // Alten Benutzernamen entfernen
                     users.Add(newUsername, userInfo); // Neuen Benutzernamen hinzufügen
                     Console.WriteLine($"Benutzername wurde von {oldUsername} auf {newUsername} geändert.");
@@ -302,7 +302,7 @@ namespace CosmosKernel1
                                 string password = parts[0];
                                 string role = parts[1];
                                 string[] permissions = parts.Skip(2).ToArray();
-                                users[username] = new UserInfo(username, password, role, permissions);
+                                users[username] = new User(username, password, role, permissions);
                             }
                         }
                     }
@@ -326,9 +326,9 @@ namespace CosmosKernel1
                 Console.WriteLine("Erstelle Testbenutzer...");
 
                 // Testbenutzer hinzufügen
-                users.Add("user1", new UserInfo("user1", "password123", "User", "command.echo", "command.help", "command.help.add"));
-                users.Add("user2", new UserInfo("user2", "adminPass", "Admin", "*"));
-                users.Add("user3", new UserInfo("user3", "password123", "User", "command.*"));
+                users.Add("user1", new User("user1", "password123", "User", "command.echo", "command.help", "command.help.add"));
+                users.Add("user2", new User("user2", "adminPass", "Admin", "*"));
+                users.Add("user3", new User("user3", "password123", "User", "command.*"));
 
                 // Speichern der Benutzer in die Datei
                 SaveUsers();
