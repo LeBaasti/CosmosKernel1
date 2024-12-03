@@ -18,7 +18,6 @@ namespace CosmosKernel1.Commands
         {
             if (args.Length < 2)
             {
-                Console.WriteLine("Fehlerhafte Syntax. Benutzung: changeuserrole <username> <role>");
                 return false;
             }
 
@@ -29,13 +28,13 @@ namespace CosmosKernel1.Commands
             if (role == null)
             {
                 Console.WriteLine($"Ungültige Rolle: {roleName}. Verfügbare Rollen: {string.Join(", ", RoleMangement.GetAllRoles())}");
-                return false;
+                return true;
             }
 
             if (!UserManagement.UserExists(username))
             {
                 Console.WriteLine($"Benutzer {username} existiert nicht.");
-                return false;
+                return true;
             }
 
             UserManagement.ChangeUserRole(username, role);
