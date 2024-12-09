@@ -5,15 +5,18 @@ using System.IO;
 using CosmosKernel1.Commands.API;
 using CosmosKernel1.Commands;
 using Cosmos.System.ScanMaps;
+using Cosmos.System.Graphics;
+using System.Drawing;
 
 namespace CosmosKernel1
 {
     public class Kernel : Sys.Kernel
     {
+        Canvas canvas;
 
         protected override void BeforeRun()
         {
-            //change german keyboard layout
+            //change to german keyboard layout
             SetKeyboardScanMap(new DE_Standard());
 
             FileSystemManager.Initialize();
@@ -29,6 +32,16 @@ namespace CosmosKernel1
             Console.WriteLine("Cosmos booted successfully.");
 
             login();
+
+            /*
+            You don't have to specify the Mode, but here we do to show that you can.
+            To not specify the Mode and pick the best one, use:
+            canvas = FullScreenCanvas.GetFullScreenCanvas();
+            */
+            //canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(1920, 1080, ColorDepth.ColorDepth32));
+
+            // This will clear the canvas with the specified color.
+            //canvas.Clear(Color.Blue);
         }
 
         private void registerCommands()
@@ -43,7 +56,6 @@ namespace CosmosKernel1
             CommandHandler.RegisterCommand("rmdir", new RmdirCommand());
             CommandHandler.RegisterCommand("touch", new TouchCommand());
             CommandHandler.RegisterCommand("write", new WriteCommand());
-
         }
 
         public void login()
@@ -114,6 +126,8 @@ namespace CosmosKernel1
 
         protected override void Run()
         {
+            //canvas.Display(); // Required for something to be displayed when using a double buffered driver
+
             Console.Write($"{UserManagement.loggedInUser.Name}@cosmosos-desktop:{FileSystemManager.currentDirectory}$ ");
             string[] arguments = Console.ReadLine().Split(" ");
             string command = arguments[0];

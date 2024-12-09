@@ -263,7 +263,7 @@ namespace CosmosKernel1
                     foreach (var user in users)
                     {
                         var userInfo = user.Value;
-                        writer.WriteLine($"{user.Key}:{userInfo.Password},{userInfo.Role},{String.Join(",", userInfo.Permissions)}");
+                        writer.WriteLine($"{user.Key}:{userInfo.Password},{userInfo.Role.Name},{String.Join(",", userInfo.Permissions)}");
                     }
                 }
                 Console.WriteLine("Benutzerdaten erfolgreich gespeichert.");
@@ -294,7 +294,9 @@ namespace CosmosKernel1
                                 return;
                             }
                             string username = userInfoString[0].ToLower();
+                            Console.WriteLine(username);
                             var parts = userInfoString[1].Split(",");
+                            Console.WriteLine(userInfoString[1]);
                             if (parts.Length >= 2)
                             {
                                 string password = parts[0];
@@ -319,7 +321,7 @@ namespace CosmosKernel1
 
         public static void InitializeTestUsers()
         {
-            if (!File.Exists(FilePath))  // Prüfen, ob die Datei existiert
+            if (true || !File.Exists(FilePath))  // Prüfen, ob die Datei existiert
             {
                 Console.WriteLine("Erstelle Testbenutzer...");
 
