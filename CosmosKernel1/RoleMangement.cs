@@ -56,6 +56,8 @@ namespace CosmosKernel1
             return RoleExists(name.ToLower()) ? roles[name.ToLower()] : null;
         }
 
+        public static Dictionary<string, Role> GetRoles() { return roles; }
+
 
         private static void SaveRoles()
         {
@@ -130,8 +132,8 @@ namespace CosmosKernel1
 
                 // Testbenutzer hinzufügen
                 roles.Add("admin", new Role("admin", "*"));
-                roles.Add("user", new Role("user", "command.ls", "command.cd"));
-                roles.Add("guest", new Role("guest", "command.echo"));
+                roles.Add("user", new Role("user", "command.logut", "command.ls", "command.cd"));
+                roles.Add("guest", new Role("guest", "command.logout", "command.echo"));
 
                 // Speichern der Benutzer in die Datei
                 SaveRoles();

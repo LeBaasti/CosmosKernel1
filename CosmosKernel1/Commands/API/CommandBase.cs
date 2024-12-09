@@ -32,7 +32,7 @@ namespace CosmosKernel1.Commands.API
 
         public void PrintUsage()
         {
-            Console.WriteLine(Usage);
+            ConsoleHelper.WriteColored($"<blue>{Identifier.CommandName}<gray>: <cyan>{Usage}");
         }
     }
 

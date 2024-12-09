@@ -25,14 +25,14 @@ namespace CosmosKernel1.Commands
             {
                 foreach (var command in CommandHandler.GetAllCommands())
                 {
-                    Console.WriteLine(command.Usage);
+                    command.PrintUsage();
                 }
             }
             else if (args.Length == 1)
             {
                 if (CommandHandler.GetCommand(args[0]) is CommandBase command)
                 {
-                    Console.WriteLine(args[0] + ": " + command.Usage);
+                    command.PrintUsage();
                 }
                 else
                 {

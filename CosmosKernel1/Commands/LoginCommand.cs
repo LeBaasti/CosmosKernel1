@@ -18,7 +18,6 @@ namespace CosmosKernel1.Commands
         {
             if (args.Length < 2)
             {
-                Console.WriteLine("Fehlerhafte Syntax. Benutzung: login <username> <password>");
                 return false;
             }
 
@@ -30,7 +29,7 @@ namespace CosmosKernel1.Commands
                 return true;
             }
 
-            return false;
+            return true;
         }
     }
 }

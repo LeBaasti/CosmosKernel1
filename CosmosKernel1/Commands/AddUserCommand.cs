@@ -24,7 +24,6 @@ namespace CosmosKernel1.Commands
         {
             if (args.Length < 3)
             {
-                Console.WriteLine("Fehlerhafte Syntax. Benutzung: adduser <username> <password> <role>");
                 return false;
             }
 
@@ -35,8 +34,8 @@ namespace CosmosKernel1.Commands
             Role role = RoleMangement.GetRoleByName(roleName);
             if (role == null)
             {
-                Console.WriteLine($"Ungültige Rolle: {roleName}. Verfügbare Rollen: {string.Join(", ", RoleMangement.GetAllRoles())}");
-                return false;
+                Console.WriteLine($"Ungültige Rolle: {roleName}. Verfügbare Rollen: {string.Join(", ", RoleMangement.GetRoles().Keys)}");
+                return true;
             }
 
             UserManagement.AddUser(username, password, role);

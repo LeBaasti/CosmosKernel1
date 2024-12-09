@@ -18,7 +18,6 @@ namespace CosmosKernel1.Commands
         {
             if (args.Length < 1)
             {
-                Console.WriteLine("Fehlerhafte Syntax. Benutzung: userinfo <username>");
                 return false;
             }
 

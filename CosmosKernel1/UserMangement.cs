@@ -62,8 +62,8 @@ namespace CosmosKernel1
             if (!users.ContainsKey(username))
             {
                 users.Add(username, new User(username, password, role)); // Übergebe den Benutzernamen
-                Console.WriteLine($"Benutzer {username} mit der Rolle {role} wurde hinzugefügt.");
                 SaveUsers(); // Speichert nach jedem Hinzufügen
+                Console.WriteLine($"Benutzer {username} mit der Rolle {role.Name} wurde hinzugefügt.");
             }
             else
             {
@@ -122,8 +122,8 @@ namespace CosmosKernel1
             if (users.ContainsKey(username))
             {
                 users[username].Role = newRole;
-                Console.WriteLine($"Die Rolle von {username} wurde auf {newRole} geändert.");
                 SaveUsers();
+                Console.WriteLine($"Die Rolle von {username} wurde auf {newRole.Name} geändert.");
             }
             else
             {
@@ -138,9 +138,8 @@ namespace CosmosKernel1
             if (users.ContainsKey(username))
             {
                 users.Remove(username);
-                Console.WriteLine($"Benutzer {username} wurde entfernt.");
                 SaveUsers(); // Speichere die Änderungen
-
+                Console.WriteLine($"Benutzer {username} wurde entfernt.");
             }
             else
             {
@@ -162,7 +161,7 @@ namespace CosmosKernel1
             {
                 string username = kvp.Key;
                 User userInfo = kvp.Value;
-                Console.WriteLine($"Benutzer: {username}, Role: {userInfo.Role}");
+                Console.WriteLine($"Benutzer: {username}, Role: {userInfo.Role.Name}");
             }
         }
 
@@ -173,7 +172,7 @@ namespace CosmosKernel1
             if (users.ContainsKey(username))
             {
                 User userInfo = users[username];
-                Console.WriteLine($"Benutzer: {username}, Passwort: {userInfo.Password}, Role: {userInfo.Role},");
+                Console.WriteLine($"Benutzer: {username} | Passwort: {userInfo.Password} | Role: {userInfo.Role.Name} | Permissions: {String.Join(", ", userInfo.Permissions)}");
             }
             else
             {
@@ -211,6 +210,7 @@ namespace CosmosKernel1
             if (loggedInUser != null)
             {
                 loggedInUser = null;
+                LoginPrompt();
                 return true;
             }
             return false;
@@ -244,6 +244,72 @@ namespace CosmosKernel1
                 Console.WriteLine("Benutzer existiert nicht.");
                 return false;
             }
+        }
+
+        public static void LoginPrompt()
+        {
+            // Login-Auforderung
+            Console.WriteLine("Bitte melden Sie sich an.");
+            string username;
+            string password;
+
+            // Überprüfen, ob der Benutzer existiert
+            while (true)
+            {
+                Console.Write("Benutzername: ");
+                username = Console.ReadLine();
+
+                if (!string.IsNullOrEmpty(username) && UserManagement.UserExists(username))
+                {
+                    break; // Abbrechen, wenn der Benutzer existiert
+                }
+                else
+                {
+                    Console.WriteLine("Benutzername falsch, bitte versuchen Sie es erneut.");
+                }
+            }
+
+            // Endlosschleife zur Passwortabfrage
+            while (true) // Unendliche Schleife für die Passwortabfrage
+            {
+                Console.Write("Passwort: ");
+                password = GetPasswordPrompt(); // Ruft das Passwort mit Sternchen-Eingabe ab
+
+                // Einloggen des Benutzers
+                if (UserManagement.Login(username, password)) break;
+            }
+        }
+
+        public static string GetPasswordPrompt()
+        {
+            string password = "";
+            ConsoleKeyInfo key;
+
+            do
+            {
+                key = Console.ReadKey(true); // true = Zeichen wird nicht angezeigt
+
+                if (key.Key == ConsoleKey.Backspace && password.Length > 0)
+                {
+                    // Ein Zeichen aus der Passworteingabe löschen
+                    password = password.Substring(0, password.Length - 1);
+
+                    // Cursor eine Stelle zurücksetzen, das Sternchen überschreiben und Cursor wieder zurücksetzen
+                    int cursorPos = Console.CursorLeft;
+                    Console.SetCursorPosition(cursorPos - 1, Console.CursorTop);
+                    Console.Write(" ");
+                    Console.SetCursorPosition(cursorPos - 1, Console.CursorTop);
+                }
+                else if (key.Key != ConsoleKey.Enter && key.Key != ConsoleKey.Backspace)
+                {
+                    // Zeichen zum Passwort hinzufügen und Sternchen anzeigen
+                    password += key.KeyChar;
+                    Console.Write("*");
+                }
+            } while (key.Key != ConsoleKey.Enter); // Schleife läuft, bis Enter gedrückt wird
+
+            Console.WriteLine(); // Zeilenumbruch nach der Eingabe
+            return password;
         }
 
         private static void SaveUsers()
@@ -294,9 +360,7 @@ namespace CosmosKernel1
                                 return;
                             }
                             string username = userInfoString[0].ToLower();
-                            Console.WriteLine(username);
                             var parts = userInfoString[1].Split(",");
-                            Console.WriteLine(userInfoString[1]);
                             if (parts.Length >= 2)
                             {
                                 string password = parts[0];
@@ -321,7 +385,7 @@ namespace CosmosKernel1
 
         public static void InitializeTestUsers()
         {
-            if (true || !File.Exists(FilePath))  // Prüfen, ob die Datei existiert
+            if (!File.Exists(FilePath))  // Prüfen, ob die Datei existiert
             {
                 Console.WriteLine("Erstelle Testbenutzer...");
 

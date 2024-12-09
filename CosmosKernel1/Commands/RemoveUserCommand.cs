@@ -18,7 +18,6 @@ namespace CosmosKernel1.Commands
         {
             if (args.Length < 1)
             {
-                Console.WriteLine("Fehlerhafte Syntax. Benutzung: removeuser <username>");
                 return false;
             }
 
@@ -26,7 +25,7 @@ namespace CosmosKernel1.Commands
             if (!UserManagement.UserExists(username))
             {
                 Console.WriteLine($"Benutzer {username} existiert nicht.");
-                return false;
+                return true;
             }
 
             UserManagement.RemoveUser(username);

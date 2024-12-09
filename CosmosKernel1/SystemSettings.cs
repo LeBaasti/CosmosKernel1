@@ -10,5 +10,7 @@ namespace CosmosKernel1
     {
         public static readonly int MinCharCountPassword = 4;
         public static readonly int MinCharCountUsername = 4;
+
+        public static readonly int consoleWidth = 80;
     }
 }

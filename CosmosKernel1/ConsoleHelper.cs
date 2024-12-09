@@ -14,8 +14,11 @@ namespace CosmosKernel1
             {
                 { "<red>", ConsoleColor.Red },
                 { "<green>", ConsoleColor.Green },
+                { "<gray>", ConsoleColor.Gray },
+                { "<magenta>", ConsoleColor.Magenta },
                 { "<white>", ConsoleColor.White },
                 { "<blue>", ConsoleColor.Blue },
+                { "<cyan>", ConsoleColor.Cyan },
                 { "<yellow>", ConsoleColor.Yellow }
                 // Add more colors here
             };

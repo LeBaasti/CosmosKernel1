@@ -27,7 +27,7 @@ namespace CosmosKernel1.Commands
             Role role = RoleMangement.GetRoleByName(roleName);
             if (role == null)
             {
-                Console.WriteLine($"Ungültige Rolle: {roleName}. Verfügbare Rollen: {string.Join(", ", RoleMangement.GetAllRoles())}");
+                Console.WriteLine($"Ungültige Rolle: {roleName}. Verfügbare Rollen: {string.Join(", ", RoleMangement.GetRoles().Keys)}");
                 return true;
             }
 
