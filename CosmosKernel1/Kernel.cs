@@ -56,6 +56,15 @@ namespace CosmosKernel1
             CommandHandler.RegisterCommand("rmdir", new RmdirCommand());
             CommandHandler.RegisterCommand("touch", new TouchCommand());
             CommandHandler.RegisterCommand("write", new WriteCommand());
+            CommandHandler.RegisterCommand("changeuserrole", new ChangeUserRoleCommand());
+            CommandHandler.RegisterCommand("adduser", new AddUserCommand());
+            CommandHandler.RegisterCommand("getuserinfo", new GetUserInfoCommand());
+            CommandHandler.RegisterCommand("initialize", new InitializeCommand());
+            CommandHandler.RegisterCommand("listusers", new ListUsersCommand());
+            CommandHandler.RegisterCommand("login", new LoginCommand());
+            CommandHandler.RegisterCommand("logout", new LogoutCommand());
+            CommandHandler.RegisterCommand("removeuser", new RemoveUserCommand());
+            
         }
 
         public void login()
