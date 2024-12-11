@@ -57,6 +57,7 @@ namespace CosmosKernel1
             {
                 // Stelle sicher, dass das Verzeichnis existiert
                 string directoryPath = Path.GetDirectoryName(path);
+                Console.WriteLine($"{directoryPath}:{content}");
                 if (!Directory.Exists(directoryPath))
                 {
                     Directory.CreateDirectory(directoryPath);

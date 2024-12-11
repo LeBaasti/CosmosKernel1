@@ -25,7 +25,7 @@ namespace CosmosKernel1.Commands
             {
                 foreach (var command in CommandHandler.GetAllCommands())
                 {
-                    command.PrintUsage();
+                    if(UserManagement.loggedInUser.HasPermission(command.Identifier.RequiredPermission)) command.PrintUsage();
                 }
             }
             else if (args.Length == 1)

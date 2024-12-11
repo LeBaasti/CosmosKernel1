@@ -21,6 +21,8 @@ namespace CosmosKernel1.Commands
 
         public override bool Run(string[] args)
         {
+            if(args.Length == 0) return false;
+
             string fileName = Path.Combine(FileSystemManager.currentDirectory, args[0]); // Kombiniere den aktuellen Pfad mit dem Dateinamen
             Console.WriteLine("Bitte Inhalt eingeben");
             string content = Console.ReadLine();
